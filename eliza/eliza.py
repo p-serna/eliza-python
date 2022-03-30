@@ -11,9 +11,9 @@ class Eliza():
   def __init__(self, lang="en"):
     self.lang = lang
     if lang=="en":
-      import eliza.en.data as data
+      from en import data
     elif lang=="es":
-      import eliza.es.data as data
+      from es import data
     else:
       raise Exception("Not implement yet!")
 
@@ -27,4 +27,10 @@ class Eliza():
                   for word in words
                   ]
     return " ".join(newwords)
+  
+  def respond(self, text):
+    pass
+
+if __name__=="__main__":
+  therapist = Eliza()
   
