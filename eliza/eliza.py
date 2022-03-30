@@ -11,14 +11,17 @@ class Eliza():
   def __init__(self, lang="en"):
     self.lang = lang
     if lang=="en":
-      from en import data
+      from eliza.en import data
     elif lang=="es":
-      from es import data
+      from eliza.es import data
     else:
       raise Exception("Not implement yet!")
 
     self.vocabulary = data.reflections
     self.vocabulary_keys = self.vocabulary.keys()
+
+    self.patterns = list(map(lambda x: re.compile(x[0], re.IGNORECASE),data.patts))
+    self.responses = list(map(lambda x: x[1],data.patts))
 
   def translate(self, text):
     words = text.lower().strip().split()
@@ -28,9 +31,26 @@ class Eliza():
                   ]
     return " ".join(newwords)
   
+  def clean(self,text):
+    return text
+
   def respond(self, text):
+    text = self.clean(text)
+    for patt,answers in zip(self.patterns,self.responses):
+      match = patt.match(text)
+      if match:
+        #Random choice 
+        ans = random.choice(answers)
+        
+        var_subs = re.findall(r"%[0-9][0-9]*",ans)
+        if len(var_subs)>1:
+          var_subs = list(set(var_subs))
+        n_subs = [int(v[1:]) for v in var_subs]
+        
+        for n,v in zip(n_subs,var_subs):
+          ans = re.sub(v,self.translate(match.group(n)),ans)
+        return ans
+    return text
     pass
 
-if __name__=="__main__":
-  therapist = Eliza()
-  
+
