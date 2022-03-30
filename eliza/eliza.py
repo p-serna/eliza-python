@@ -32,7 +32,8 @@ class Eliza():
     return " ".join(newwords)
   
   def clean(self,text):
-    return text
+    newtext = re.sub(r"[^a-zA-Z]*$","",text)
+    return newtext
 
   def respond(self, text):
     text = self.clean(text)
@@ -51,6 +52,5 @@ class Eliza():
           ans = re.sub(v,self.translate(match.group(n)),ans)
         return ans
     return text
-    pass
 
 
