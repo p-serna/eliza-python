@@ -1,5 +1,6 @@
 import re
 import random
+import unidecode
 
 class Eliza():
   '''
@@ -36,10 +37,12 @@ class Eliza():
     return newtext
 
   def respond(self, text):
-    text = self.clean(text)
+    utext = unidecode.unidecode(text)
     for patt,answers in zip(self.patterns,self.responses):
-      match = patt.match(text)
+      match = patt.match(utext)
       if match:
+        text = self.clean(text)
+
         #Random choice 
         ans = random.choice(answers)
         
